@@ -1,0 +1,253 @@
+@import 'tailwindcss';
+
+/* ==================================================================
+   Cupertino Editorial — design tokens
+   ------------------------------------------------------------------
+   Values live on :root / .dark as plain custom properties, and the
+   Tailwind theme maps onto them with `@theme inline` so that every
+   utility resolves through the switchable variable.
+   ================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* Surfaces */
+  --canvas: #f5f5f7;
+  --card: #ffffff;
+  --sidebar: #fbfbfd;
+  --recess: #f7f7fa;
+  --hairline: #e5e5ea;
+
+  /* Text */
+  --ink: #1d1d1f;
+  /* Apple's own secondary-text grey. #86868b looks right but only reaches
+     3.6:1 on white; this clears WCAG AA (4.5:1) on every surface in the ramp. */
+  --muted: #6e6e73;
+
+  /* Accents */
+  --blue: #0071e3;
+  --blue-hover: #0077ed;
+  --amber: #ff9500;
+
+  /* Tinted fills (chips, buttons, row hovers) */
+  --fill-subtle: rgb(0 0 0 / 0.03);
+  --fill: rgb(0 0 0 / 0.05);
+  --fill-strong: rgb(0 0 0 / 0.09);
+
+  /* Chrome translucency */
+  --chrome: rgb(245 245 247 / 0.8);
+
+  /* Elevation */
+  --sh-card: 0 4px 20px -2px rgb(0 0 0 / 0.05), 0 2px 6px -1px rgb(0 0 0 / 0.02);
+  --sh-float: 0 12px 32px rgb(0 0 0 / 0.12);
+  --sh-pill: 0 1px 3px rgb(0 0 0 / 0.08), 0 0 0 0.5px rgb(0 0 0 / 0.04);
+}
+
+.dark {
+  color-scheme: dark;
+
+  --canvas: #000000;
+  --card: #1c1c1e;
+  --sidebar: #0d0d0d;
+  --recess: #2c2c2e;
+  --hairline: #38383a;
+
+  --ink: #f5f5f7;
+  --muted: #98989d;
+
+  --blue: #0a84ff;
+  --blue-hover: #409cff;
+  --amber: #ff9f0a;
+
+  --fill-subtle: rgb(255 255 255 / 0.05);
+  --fill: rgb(255 255 255 / 0.09);
+  --fill-strong: rgb(255 255 255 / 0.16);
+
+  --chrome: rgb(10 10 10 / 0.78);
+
+  /* On black, cards need a hairline ring instead of a drop shadow. */
+  --sh-card: 0 0 0 1px var(--hairline), 0 6px 26px -8px rgb(0 0 0 / 0.9);
+  --sh-float: 0 0 0 1px var(--hairline), 0 16px 40px rgb(0 0 0 / 0.7);
+  --sh-pill: 0 1px 3px rgb(0 0 0 / 0.6), 0 0 0 0.5px rgb(255 255 255 / 0.08);
+}
+
+@theme inline {
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Inter', 'Segoe UI',
+    'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  --color-canvas: var(--canvas);
+  --color-card: var(--card);
+  --color-sidebar: var(--sidebar);
+  --color-recess: var(--recess);
+  --color-hairline: var(--hairline);
+
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+
+  --color-blue: var(--blue);
+  --color-blue-hover: var(--blue-hover);
+  --color-amber: var(--amber);
+
+  --color-fill-subtle: var(--fill-subtle);
+  --color-fill: var(--fill);
+  --color-fill-strong: var(--fill-strong);
+  --color-chrome: var(--chrome);
+
+  --shadow-apple-card: var(--sh-card);
+  --shadow-apple-float: var(--sh-float);
+  --shadow-apple-pill: var(--sh-pill);
+}
+
+/* ==================================================================
+   Base
+   ================================================================== */
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    letter-spacing: -0.002em;
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--blue) 25%, transparent);
+  }
+
+  /* Keep native form controls and scrollbars in sync with the theme */
+  input,
+  textarea,
+  select {
+    color-scheme: inherit;
+  }
+
+  /* Thin, auto-hiding horizontal scrollers (Apple-like) */
+  .scroller {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overscroll-behavior-x: contain;
+  }
+  .scroller::-webkit-scrollbar {
+    display: none;
+  }
+  .scroller > * {
+    scroll-snap-align: start;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ==================================================================
+   Utilities
+   ================================================================== */
+@utility text-balance {
+  text-wrap: balance;
+}
+
+/* Apple's signature continuous-curve squircle */
+@utility squircle {
+  border-radius: 22.37%;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+@utility frosted {
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+@utility clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@utility clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ==================================================================
+   Theme-sensitive escape hatches
+   Unlayered on purpose: these must beat Tailwind's utility layer.
+   ================================================================== */
+
+/* In dark mode a hairline ring reads better than a drop shadow on
+   surfaces that sit directly on pure black. */
+.dark .shadow-apple-card {
+  box-shadow: var(--sh-card);
+}
+
+/* The charts insight banner uses a soft tonal wash that has to invert. */
+.banner-insight {
+  background: linear-gradient(115deg, #ffffff 0%, #eef3fb 55%, #dfe9f8 100%);
+}
+.dark .banner-insight {
+  background: linear-gradient(115deg, #1c1c1e 0%, #17202e 55%, #101a29 100%);
+}
+
+/* The appearance toggle renders both glyphs so the server and the client emit
+   identical markup; the pre-paint `.dark` class picks the visible one. */
+.theme-glyph-dark {
+  display: none;
+}
+.dark .theme-glyph-light {
+  display: none;
+}
+.dark .theme-glyph-dark {
+  display: block;
+}
+
+/* The simulated app screenshots are intentionally light in both themes —
+   they stand in for real image assets, exactly like the real storefront. */
+.mock-screen {
+  background: #ffffff;
+  color: #1d1d1f;
+}
+
+/* ==================================================================
+   Motion
+   ================================================================== */
+.page-enter-active,
+.page-leave-active {
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease;
+}
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(6px);
+}
+.page-leave-to {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

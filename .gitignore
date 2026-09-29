@@ -1,0 +1,36 @@
+# Nuxt
+.nuxt
+.output
+.data
+.nitro
+.cache
+dist
+
+# Dependencies
+node_modules
+
+# Local preview / diagnostics
+.preview
+
+# Assistant workspace (session notes, not project source)
+.workbuddy-ai
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Scratch files
+.tmp-*
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea
+.vscode/*
+!.vscode/extensions.json

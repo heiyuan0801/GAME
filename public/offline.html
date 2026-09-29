@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="robots" content="noindex" />
+    <title>Offline — App Store</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+      /* Deliberately self-contained: this document is served by the service
+         worker when the network is gone, so it must not depend on any external
+         stylesheet, script or font. */
+      :root {
+        color-scheme: light dark;
+        --canvas: #f5f5f7;
+        --card: #ffffff;
+        --ink: #1d1d1f;
+        --muted: #86868b;
+        --blue: #0071e3;
+        --hairline: #e5e5ea;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --canvas: #000000;
+          --card: #1c1c1e;
+          --ink: #f5f5f7;
+          --muted: #98989d;
+          --blue: #0a84ff;
+          --hairline: #38383a;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: var(--canvas);
+        color: var(--ink);
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', 'Helvetica Neue', Helvetica,
+          Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        text-align: center;
+      }
+      main {
+        max-width: 460px;
+      }
+      .mark {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto;
+        display: grid;
+        place-items: center;
+        border-radius: 18px;
+        background: linear-gradient(160deg, #1f9bf7 0%, #0a6ae0 100%);
+      }
+      h1 {
+        margin: 24px 0 0;
+        font-size: 28px;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+      }
+      p {
+        margin: 12px 0 0;
+        font-size: 14.5px;
+        line-height: 1.55;
+        color: var(--muted);
+      }
+      nav {
+        margin-top: 28px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+      }
+      a {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 999px;
+        font-size: 13.5px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background-color 0.2s ease;
+      }
+      a.primary {
+        background: var(--blue);
+        color: #fff;
+      }
+      a.primary:hover {
+        filter: brightness(1.08);
+      }
+      a.secondary {
+        border: 1px solid var(--hairline);
+        background: var(--card);
+        color: var(--ink);
+      }
+      a.secondary:hover {
+        background: color-mix(in srgb, var(--ink) 5%, transparent);
+      }
+      #status {
+        margin-top: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+      #dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: #ff9500;
+      }
+      body.online #dot {
+        background: var(--blue);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="34" height="34" fill="#fff">
+          <path d="M17 34l8-13.6 3 5.2-5.2 8.4z" />
+          <path d="M31 34H13l2.6-4.4h17.8z" />
+          <circle cx="24" cy="15" r="3.4" />
+        </svg>
+      </div>
+
+      <h1>You’re offline</h1>
+      <p>
+        This page hasn’t been saved for offline use yet. Pages you’ve already visited — Today, Top
+        Charts and the app you were reading — will still open.
+      </p>
+
+      <nav>
+        <a class="primary" href="/">Go to Today</a>
+        <a class="secondary" href="/charts">Top Charts</a>
+      </nav>
+
+      <p id="status"><span id="dot"></span><span id="label">Waiting for a connection…</span></p>
+    </main>
+
+    <script>
+      // Tiny and inline on purpose: the page has to work with nothing cached
+      // but itself.
+      var body = document.body
+      var label = document.getElementById('label')
+      function sync() {
+        var on = navigator.onLine
+        body.classList.toggle('online', on)
+        label.textContent = on ? 'Back online — reload to continue' : 'Waiting for a connection…'
+      }
+      sync()
+      window.addEventListener('online', sync)
+      window.addEventListener('offline', sync)
+    </script>
+  </body>
+</html>
