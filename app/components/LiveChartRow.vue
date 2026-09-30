@@ -45,7 +45,7 @@ const failed = ref(false)
 
     <div class="flex shrink-0 flex-col items-end gap-1.5">
       <span
-        class="rounded-full bg-blue px-4 py-[5px] text-[12.5px] font-semibold text-white transition group-hover:bg-blue-hover"
+        class="rounded-full bg-blue px-4 py-[5px] text-[12.5px] font-semibold text-on-blue transition group-hover:bg-blue-hover"
       >
         {{ entry.price === 'Free' ? 'GET' : entry.price }}
       </span>

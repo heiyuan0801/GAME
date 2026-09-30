@@ -33,6 +33,20 @@
      (filled buttons). #0071e3 only reaches 4.31:1 on the canvas, so blue *text*
      uses the design system's `primary` instead. */
   --link: #0059b5;
+  /* DESIGN.md's `error`, which clears 4.5:1 on white. */
+  --error: #ba1a1a;
+
+  /* Label colour for filled blue buttons. White is fine on the light blue but
+     only reaches 3.65:1 on the brighter dark-mode blue, so dark mode flips the
+     label instead of dulling the accent. */
+  --on-blue: #ffffff;
+
+  /* Editorial accent tones. These are used as *text*, so they have to clear
+     4.5:1 on both a white card and a near-black one — which no single hex can
+     do, hence a pair. */
+  --tone-blue: #0059b5;
+  --tone-green: #15803d;
+  --tone-amber: #ab6200;
 
   /* Tinted fills (chips, buttons, row hovers) */
   --fill-subtle: rgb(0 0 0 / 0.03);
@@ -64,6 +78,11 @@
   --blue-hover: #409cff;
   --amber: #ff9f0a;
   --link: #abc7ff;
+  --error: #ff6961;
+  --on-blue: #08182b;
+  --tone-blue: #6cb2ff;
+  --tone-green: #5ed88f;
+  --tone-amber: #f0b25c;
 
   --fill-subtle: rgb(255 255 255 / 0.05);
   --fill: rgb(255 255 255 / 0.09);
@@ -95,6 +114,8 @@
   --color-blue-hover: var(--blue-hover);
   --color-amber: var(--amber);
   --color-link: var(--link);
+  --color-error: var(--error);
+  --color-on-blue: var(--on-blue);
 
   --color-fill-subtle: var(--fill-subtle);
   --color-fill: var(--fill);
@@ -224,6 +245,16 @@
 }
 .dark .theme-glyph-dark {
   display: block;
+}
+
+/* Surfaces that are deliberately light in both themes — the Arcade hero's white
+   button, the pastel genre and category tiles — must pin their text too.
+   Leaving it on `--ink` flips it to near-white in dark mode and disappears. */
+.on-light {
+  color: #1d1d1f;
+}
+.on-light-muted {
+  color: #5c5c61;
 }
 
 /* The simulated app screenshots are intentionally light in both themes —

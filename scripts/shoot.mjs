@@ -225,13 +225,22 @@ const A11Y_SCRIPT = `(() => {
   };
 
   // --- contrast ---------------------------------------------------------
-  const seen = {};
+  // Emoji render in their own colours regardless of the CSS color property, so
+  // measuring them against the background produces pure noise.
+  const EMOJI_ONLY = /^[\\p{Extended_Pictographic}\\uFE0F\\u200D\\s]+$/u
+  const seen = {}
   const textEls = Array.from(document.querySelectorAll('body *')).filter((el) => {
     const r = el.getBoundingClientRect();
     if (r.width < 2 || r.height < 2) return false;
     const cs = getComputedStyle(el);
     if (cs.visibility === 'hidden' || cs.opacity === '0') return false;
-    return Array.from(el.childNodes).some((n) => n.nodeType === 3 && n.textContent.trim().length > 1);
+    const own = Array.from(el.childNodes)
+      .filter((n) => n.nodeType === 3)
+      .map((n) => n.textContent)
+      .join('')
+      .trim();
+    if (own.length < 2 || EMOJI_ONLY.test(own)) return false;
+    return true;
   });
 
   for (const el of textEls) {

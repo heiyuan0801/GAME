@@ -80,7 +80,7 @@ const perks = [
         <div class="mt-6 flex flex-wrap items-center gap-3">
           <button
             type="button"
-            class="rounded-full bg-white px-5 py-2.5 text-[14px] font-semibold text-ink transition hover:bg-white/85"
+            class="rounded-full bg-white px-5 py-2.5 text-[14px] font-semibold on-light transition hover:bg-white/85"
           >
             Try It Free
           </button>

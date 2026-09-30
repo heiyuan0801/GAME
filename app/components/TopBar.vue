@@ -5,6 +5,16 @@ import { byId } from '~/data/apps'
 const router = useRouter()
 const route = useRoute()
 const { theme, toggle } = useTheme()
+const { user, openAuth } = useAuth()
+
+const initials = computed(() =>
+  (user.value?.name ?? '')
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0]!.toUpperCase())
+    .join(''),
+)
 
 /**
  * The theme is resolved by the pre-paint script and the client plugin, so by the
@@ -60,11 +70,12 @@ onBeforeUnmount(() => document.removeEventListener('click', onDocClick))
 <template>
   <header class="sticky top-0 z-40 border-b border-hairline/70 bg-chrome frosted">
     <div class="mx-auto flex h-[58px] max-w-[1180px] items-center gap-2 px-4 sm:gap-3 sm:px-6">
-      <!-- Mobile brand -->
-      <NuxtLink to="/" class="flex items-center gap-2 lg:hidden">
+      <!-- Mobile brand: the mark is the only content, so it needs a name. -->
+      <NuxtLink to="/" class="flex items-center gap-2 lg:hidden" aria-label="App Store home">
         <span
           class="grid h-7 w-7 place-items-center rounded-[8px] text-white"
           style="background: linear-gradient(160deg, #1f9bf7 0%, #0a6ae0 100%)"
+          aria-hidden="true"
         >
           <UiIcon name="appstore" :size="17" />
         </span>
@@ -129,6 +140,24 @@ onBeforeUnmount(() => document.removeEventListener('click', onDocClick))
         >
           <UiIcon name="search" :size="18" />
         </NuxtLink>
+
+        <button
+          type="button"
+          class="grid h-8 w-8 place-items-center rounded-full text-ink/70 transition hover:bg-fill"
+          aria-haspopup="dialog"
+          :aria-label="user ? `Account: ${user.name}` : 'Sign in'"
+          @click="openAuth(user ? 'account' : 'signin')"
+        >
+          <span
+            v-if="user"
+            class="grid h-7 w-7 place-items-center rounded-full text-[11px] font-semibold text-white"
+            style="background: linear-gradient(160deg, #1f9bf7 0%, #0a6ae0 100%)"
+            aria-hidden="true"
+          >
+            {{ initials }}
+          </span>
+          <UiIcon v-else name="person" :size="18" />
+        </button>
 
         <button
           type="button"

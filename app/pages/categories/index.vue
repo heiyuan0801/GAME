@@ -33,8 +33,8 @@ const tiles = CATEGORY_GROUPS.map((c) => ({
         :style="{ background: t.tint }"
       >
         <span class="text-[26px] leading-none">{{ t.glyph }}</span>
-        <p class="mt-3 text-[15.5px] font-semibold tracking-[-0.012em]">{{ t.name }}</p>
-        <p class="mt-0.5 text-[12px] text-muted">
+        <p class="mt-3 text-[15.5px] font-semibold tracking-[-0.012em] on-light">{{ t.name }}</p>
+        <p class="mt-0.5 text-[12px] on-light-muted">
           {{ t.count }} {{ t.count === 1 ? 'app' : 'apps' }}
         </p>
         <UiIcon

@@ -19,7 +19,7 @@ const isActive = (to: string) => {
         <NuxtLink
           :to="t.to"
           class="flex flex-col items-center gap-[3px] py-2 transition"
-          :class="isActive(t.to) ? 'text-blue' : 'text-ink/50'"
+          :class="isActive(t.to) ? 'text-link' : 'text-ink/50'"
         >
           <UiIcon :name="t.glyph" :size="22" />
           <span class="text-[10px] font-medium tracking-[0.005em]">{{ t.label }}</span>

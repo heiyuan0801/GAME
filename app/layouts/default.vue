@@ -4,7 +4,7 @@
          so keyboard users need a way past it. Visible only while focused. -->
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-full focus:bg-blue focus:px-4 focus:py-2 focus:text-[13px] focus:font-semibold focus:text-white"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-full focus:bg-blue focus:px-4 focus:py-2 focus:text-[13px] focus:font-semibold focus:text-on-blue"
     >
       Skip to content
     </a>
@@ -23,5 +23,6 @@
 
     <MobileTabBar />
     <OfflineBar />
+    <AuthModal />
   </div>
 </template>

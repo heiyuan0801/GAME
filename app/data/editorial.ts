@@ -21,7 +21,12 @@ export interface ListPanel {
 export interface EventCard {
   id: string
   eyebrow: string
-  eyebrowColor: string
+  /**
+   * Accent tone name, not a hex: the eyebrow is text, so it needs a different
+   * value on a white card than on a near-black one. `EventCard.vue` resolves
+   * this to `var(--tone-<name>)`.
+   */
+  eyebrowTone: 'blue' | 'green' | 'amber'
   title: string
   body: string
   appId: string
@@ -89,7 +94,7 @@ export const TODAY_EVENTS: EventCard[] = [
   {
     id: 'e1',
     eyebrow: 'New Features',
-    eyebrowColor: '#0071e3',
+    eyebrowTone: 'blue',
     title: 'Prep for Your Day With Gemini',
     body: 'See your schedule, tasks, tips, and more each morning.',
     appId: 'gemini',
@@ -99,7 +104,7 @@ export const TODAY_EVENTS: EventCard[] = [
   {
     id: 'e2',
     eyebrow: 'Try Now',
-    eyebrowColor: '#15803d',
+    eyebrowTone: 'green',
     title: 'Learn From Mistakes in Duolingo Chess',
     body: 'Game Review gives you a move-by-move breakdown — and ways to improve.',
     appId: 'duolingo',
@@ -109,7 +114,7 @@ export const TODAY_EVENTS: EventCard[] = [
   {
     id: 'e3',
     eyebrow: 'What We’re Playing',
-    eyebrowColor: '#ab6200',
+    eyebrowTone: 'amber',
     title: 'Show School Spirit in College Football',
     body: 'The road to the National Championship starts here.',
     appId: 'ea-sports-fc',

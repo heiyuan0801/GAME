@@ -70,7 +70,7 @@ const C = 2 * Math.PI * R
         ? 'bg-transparent text-blue hover:bg-fill'
         : tone === 'muted'
           ? 'bg-fill text-blue hover:bg-fill-strong'
-          : 'bg-blue text-white hover:bg-blue-hover active:scale-[.97]',
+          : 'bg-blue text-on-blue hover:bg-blue-hover active:scale-[.97]',
     ]"
     :aria-label="`${label || 'Installing'} ${app.name}`"
     @click.stop.prevent="start"

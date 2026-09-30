@@ -6,6 +6,17 @@ const route = useRoute()
 const device = ref(DEVICES[0]!)
 const deviceOpen = ref(false)
 
+const { user, openAuth } = useAuth()
+
+const initials = computed(() =>
+  (user.value?.name ?? '')
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0]!.toUpperCase())
+    .join(''),
+)
+
 const isActive = (to: string) => {
   const base = to.split('?')[0]!
   if (base === '/') return route.path === '/'
@@ -93,6 +104,38 @@ const isActive = (to: string) => {
           </li>
         </ul>
       </nav>
+
+      <!-- Account -->
+      <div class="border-t border-hairline/70 px-4 py-3">
+        <button
+          type="button"
+          class="flex w-full items-center gap-3 rounded-[10px] px-2 py-2 text-left transition hover:bg-fill-subtle"
+          aria-haspopup="dialog"
+          :aria-label="user ? `Signed in as ${user.name}` : 'Sign in to your account'"
+          @click="openAuth(user ? 'account' : 'signin')"
+        >
+          <span
+            v-if="user"
+            class="grid h-8 w-8 shrink-0 place-items-center rounded-full text-[12px] font-semibold text-white"
+            style="background: linear-gradient(160deg, #1f9bf7 0%, #0a6ae0 100%)"
+            aria-hidden="true"
+          >
+            {{ initials }}
+          </span>
+          <UiIcon v-else name="person" :size="18" class="shrink-0 text-ink/55" />
+
+          <span class="min-w-0 flex-1">
+            <span class="block truncate text-[13.5px] font-medium text-ink">
+              {{ user ? user.name : 'Sign in' }}
+            </span>
+            <span class="block truncate text-[11.5px] text-muted">
+              {{ user ? user.email : 'Sync purchases and reviews' }}
+            </span>
+          </span>
+
+          <UiIcon name="chevronRight" :size="15" class="shrink-0 text-muted" />
+        </button>
+      </div>
 
       <!-- Device picker -->
       <div class="relative border-t border-hairline/70 px-4 py-3">

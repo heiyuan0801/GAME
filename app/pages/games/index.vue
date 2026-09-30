@@ -47,8 +47,8 @@ const genreTint: Record<string, string> = {
           class="rounded-[16px] border border-hairline p-4"
           :style="{ background: genreTint[g] }"
         >
-          <p class="text-[14.5px] font-semibold tracking-[-0.01em]">{{ g }}</p>
-          <p class="mt-0.5 text-[11.5px] text-muted">Explore</p>
+          <p class="text-[14.5px] font-semibold tracking-[-0.01em] on-light">{{ g }}</p>
+          <p class="mt-0.5 text-[11.5px] on-light-muted">Explore</p>
         </div>
       </div>
     </section>

@@ -31,7 +31,7 @@ useHead({ title: `${props.error.statusCode} — App Store` })
       </p>
       <NuxtLink
         to="/"
-        class="mt-7 rounded-full bg-blue px-5 py-2.5 text-[14px] font-semibold text-white transition hover:bg-blue-hover"
+        class="mt-7 rounded-full bg-blue px-5 py-2.5 text-[14px] font-semibold text-on-blue transition hover:bg-blue-hover"
       >
         Back to Today
       </NuxtLink>

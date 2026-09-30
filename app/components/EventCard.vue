@@ -4,6 +4,14 @@ import { byId } from '~/data/apps'
 
 const props = defineProps<{ card: EventCard }>()
 const app = computed(() => byId(props.card.appId))
+
+/** Resolved through a CSS variable so the tone can differ per theme. */
+const TONES: Record<EventCard['eyebrowTone'], string> = {
+  blue: 'var(--tone-blue)',
+  green: 'var(--tone-green)',
+  amber: 'var(--tone-amber)',
+}
+const eyebrowColor = computed(() => TONES[props.card.eyebrowTone])
 </script>
 
 <template>
@@ -13,7 +21,7 @@ const app = computed(() => byId(props.card.appId))
   >
     <p
       class="text-[11px] font-semibold tracking-[0.06em] uppercase"
-      :style="{ color: card.eyebrowColor }"
+      :style="{ color: eyebrowColor }"
     >
       {{ card.eyebrow }}
     </p>

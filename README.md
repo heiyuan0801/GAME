@@ -60,8 +60,10 @@ app/
   assets/css/main.css         design tokens (light + dark) and base styles
   composables/useTheme.ts     theme state + toggle
   composables/usePwa.ts       connectivity, service-worker registration + updates
+  composables/useAuth.ts      local accounts, session, auth-modal state
   plugins/theme.client.ts     reconciles state with the pre-paint class
   plugins/pwa.client.ts       boots connectivity tracking and the worker
+  plugins/auth.client.ts      restores the session after mount
   data/
     apps.ts                   the app dataset (38 titles) + chart helpers
     editorial.ts              Today page, chart insight, categories, arcade, search copy
@@ -83,6 +85,7 @@ app/
     ScreenshotLightbox.vue    full-screen screenshot viewer
     RatingSummary.vue  ReviewCard.vue  InfoTable.vue
     OfflineBar.vue            offline pill + "new version available" toast
+    AuthModal.vue             sign in / create account / reset password dialog
   pages/                      file-based routes
 public/
   manifest.webmanifest  sw.js  offline.html  icons/
@@ -127,6 +130,8 @@ through the switchable variable and the whole storefront re-themes from one plac
 | `--muted`        | `#636366`   | `#98989d`   | secondary text, metadata             |
 | `--blue`         | `#0071e3`   | `#0a84ff`   | primary actions (filled buttons)     |
 | `--link`         | `#0059b5`   | `#abc7ff`   | blue *text* — links, pills, badges   |
+| `--on-blue`      | `#ffffff`   | `#08182b`   | label on a filled blue button        |
+| `--error`        | `#ba1a1a`   | `#ff6961`   | form validation messages             |
 | `--amber`        | `#ff9500`   | `#ff9f0a`   | star ratings                         |
 | `--fill`         | `black 5%`  | `white 9%`  | chips, buttons, row hovers           |
 
@@ -260,6 +265,46 @@ Every contribution appends a human-readable reason ("Also in Photo & Video", "Si
 
 ---
 
+## Accounts (sign in / create account / reset password)
+
+One dialog with four faces rather than four dialogs, so the focus trap, scroll lock and escape
+handling only have to be right once. It opens from the sidebar account row (desktop) or the
+top-bar avatar button (every size):
+
+| Mode | Contents |
+| --- | --- |
+| `signin` | email + password, "Forgot password?", "Create an account" |
+| `signup` | name, email, password, confirm — with a live password hint |
+| `forgot` | email only, then a "link sent" confirmation |
+| `account` | the signed-in summary and Sign out |
+
+```
+app/
+  composables/useAuth.ts   accounts, session, modal state
+  components/AuthModal.vue the dialog
+  plugins/auth.client.ts   restores the session after mount
+```
+
+**This is a UI demo, not authentication.** There is no backend, so accounts live in `localStorage`
+and passwords are kept as a salted SHA-256 digest (`crypto.subtle`) rather than plaintext. The modal
+says so on every screen, and nothing here should be copied into anything that protects real data.
+Two details are deliberate even in a mock, because they are the habits worth keeping:
+
+- **Sign-in failure is deliberately vague** — "that email and password combination doesn't match an
+  account" rather than revealing which half was wrong.
+- **Password reset always reports success**, registered address or not, so the form can't be used to
+  enumerate accounts.
+
+Validation runs on submit and focuses the first invalid field: name ≥ 2 characters, an email shape
+check, password ≥ 8 with a letter and a number on sign-up, and a match check on confirm. Errors are
+wired with `aria-invalid` plus `aria-describedby`, and credential errors use `role="alert"`.
+
+The session is restored in an `app:mounted` hook, **not** in the plugin body — reading
+`localStorage` any earlier would make the first client render disagree with the server, which is the
+same trap the theme toggle documents.
+
+---
+
 ## Installable & offline
 
 The storefront is a PWA: it installs to the home screen and keeps working when the network drops.
@@ -343,19 +388,28 @@ Clicking any Preview tile on `/app/[id]` opens `ScreenshotLightbox.vue`:
 `scripts/shoot.mjs --a11y` audits a rendered page and reports the offending HTML alongside each
 finding, so the rules below are enforced rather than aspirational. It covers text contrast (WCAG AA,
 computed against the nearest opaque ancestor background), accessible names, heading order,
-focusables inside `aria-hidden`, and target sizes. All routes currently report **0 failures**.
+focusables inside `aria-hidden`, and target sizes. All routes report **0 failures in both light and
+dark mode**, at desktop and mobile widths.
 
 ### Colour
 
-| Token | Light | Why |
-| --- | --- | --- |
-| `--muted` | `#636366` | Deliberately **not** the design system's `#86868B` (3.6:1 on white). This clears 4.5:1 on every surface, including the pastel category tints. |
-| `--blue` | `#0071e3` | DESIGN.md's `primary-container`. Used for filled buttons and icons. |
-| `--link` | `#0059b5` | DESIGN.md's `primary` — blue **text**. `#0071e3` only reaches 4.31:1 on `--canvas`, so links, tonal pills and badges use this instead. |
+| Token | Light | Dark | Why |
+| --- | --- | --- | --- |
+| `--muted` | `#636366` | `#98989d` | Deliberately **not** the design system's `#86868B` (3.6:1 on white). Clears 4.5:1 on every surface, including the pastel tints. |
+| `--blue` | `#0071e3` | `#0a84ff` | DESIGN.md's `primary-container`. Filled buttons and icons. |
+| `--on-blue` | `#ffffff` | `#08182b` | Label on a filled blue button. White is fine on the light blue but only 3.65:1 on the brighter dark-mode blue, so dark mode flips the label instead of dulling the accent. |
+| `--link` | `#0059b5` | `#abc7ff` | DESIGN.md's `primary` — blue **text**. `#0071e3` only reaches 4.31:1 on `--canvas`. |
+| `--error` | `#ba1a1a` | `#ff6961` | Validation messages. |
+| `--tone-*` | deep | pastel | Editorial eyebrow accents. Text needs a different value on white than on near-black, so these are a pair and the data stores a tone *name*. |
 
-The split is the design system's own: Material-style token sets separate `primary` (text/icons) from
-`primary-container` (filled surfaces), and this project now does too. Icons keep `text-blue`, since
-graphical contrast only needs 3:1.
+Splitting `--blue` from `--on-blue` and from `--link` is the design system's own distinction:
+Material-style token sets separate `primary` (text/icons) from `primary-container` (filled surfaces)
+and carry an `on-*` colour for each container. Icons keep `text-blue`, since graphical contrast only
+needs 3:1.
+
+Surfaces that are **deliberately light in both themes** — the Arcade hero's white button, the pastel
+genre and category tiles — use the `.on-light` / `.on-light-muted` utilities. Leaving their text on
+`--ink` flips it to near-white in dark mode and it vanishes.
 
 ### Structure
 
@@ -365,13 +419,17 @@ graphical contrast only needs 3:1.
   Top Charts insight banner is a `<p>` — it is a promotional callout that precedes the page `<h1>`.
 - A "Skip to content" link is the first focusable element, since the sidebar is a long link list.
 - Both search fields carry an `aria-label`; a placeholder is not a label.
+- The auth dialog traps Tab, moves focus to its first field on open, restores focus to the trigger on
+  close, locks body scroll, and closes on `Escape` or a backdrop click.
 
 ### Known limits of the audit
 
 The target-size check implements the inline and 24px-spacing exceptions of SC 2.5.8, but it is still
 a heuristic — it is reported as a `note`, not a failure. Contrast is skipped wherever a gradient or a
-translucent layer makes the effective background unknowable, so a blue-on-tinted-chip case can slip
-through; the checks are deliberately conservative rather than noisy.
+translucent layer makes the effective background unknowable, and emoji are excluded (they render in
+their own colours regardless of the CSS `color` property), so a blue chip on a tinted gradient can
+slip through. **Audit both themes** — a light-only sweep looks green and hides a whole class of
+light-on-light bugs.
 
 ---
 

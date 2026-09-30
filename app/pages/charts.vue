@@ -316,7 +316,7 @@ const liveStatus = computed(() => {
         </p>
         <button
           type="button"
-          class="mt-5 inline-flex items-center gap-2 rounded-full bg-blue px-5 py-2 text-[13px] font-semibold text-white transition hover:bg-blue-hover"
+          class="mt-5 inline-flex items-center gap-2 rounded-full bg-blue px-5 py-2 text-[13px] font-semibold text-on-blue transition hover:bg-blue-hover"
           @click="loadLive()"
         >
           <UiIcon name="clock" :size="14" />

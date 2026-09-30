@@ -31,10 +31,12 @@ const ranked = computed(() => [...apps.value].sort((a, b) => b.rating - a.rating
       :style="{ background: meta!.tint }"
     >
       <span class="text-[34px] leading-none">{{ meta!.glyph }}</span>
-      <h1 class="mt-3 text-[30px] leading-none font-bold tracking-[-0.022em] sm:text-[38px]">
+      <h1
+        class="mt-3 text-[30px] leading-none font-bold tracking-[-0.022em] on-light sm:text-[38px]"
+      >
         {{ name }}
       </h1>
-      <p class="mt-2 text-[13.5px] text-muted">
+      <p class="mt-2 text-[13.5px] on-light-muted">
         {{ apps.length }} {{ apps.length === 1 ? 'title' : 'titles' }} on the storefront
       </p>
       <span

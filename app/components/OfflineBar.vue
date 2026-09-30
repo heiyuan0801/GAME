@@ -51,7 +51,7 @@ const showUpdate = computed(() => hydrated.value && updateReady.value)
         <p class="text-[13px] font-medium text-ink">A new version is ready</p>
         <button
           type="button"
-          class="rounded-full bg-blue px-3.5 py-[5px] text-[12.5px] font-semibold text-white transition hover:bg-blue-hover"
+          class="rounded-full bg-blue px-3.5 py-[5px] text-[12.5px] font-semibold text-on-blue transition hover:bg-blue-hover"
           @click="applyUpdate"
         >
           Reload

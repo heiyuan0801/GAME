@@ -263,7 +263,7 @@ const related = computed(() => recommend(a, APPS, 6))
             </div>
             <button
               type="button"
-              class="rounded-full bg-blue px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-blue-hover"
+              class="rounded-full bg-blue px-4 py-2 text-[13px] font-semibold text-on-blue transition hover:bg-blue-hover"
             >
               Write a Review
             </button>
