@@ -319,7 +319,10 @@ const A11Y_SCRIPT = `(() => {
 
   out.images = Array.from(document.querySelectorAll('img:not([alt])')).map(clip);
 
-  const first = document.querySelector('a[href^="#"]');
+  // A skip link only counts if it is the first focusable thing on the page —
+  // matching any in-page anchor just finds the footer's own links.
+  const focusables = Array.from(document.querySelectorAll('a[href], button, input, select, textarea'));
+  const firstFocusable = focusables[0];
   out.info = {
     lang: document.documentElement.lang || null,
     h1Count: levels.filter((l) => l === 1).length,
@@ -330,7 +333,12 @@ const A11Y_SCRIPT = `(() => {
       header: document.querySelectorAll('header').length,
       footer: document.querySelectorAll('footer').length,
     },
-    skipLink: first ? clip(first) : null,
+    skipLink:
+      firstFocusable &&
+      firstFocusable.tagName === 'A' &&
+      (firstFocusable.getAttribute('href') || '').startsWith('#')
+        ? clip(firstFocusable)
+        : null,
     interactiveCount: interactive.length,
   };
 

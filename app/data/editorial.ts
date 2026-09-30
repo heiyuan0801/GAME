@@ -99,7 +99,7 @@ export const TODAY_EVENTS: EventCard[] = [
   {
     id: 'e2',
     eyebrow: 'Try Now',
-    eyebrowColor: '#1a9c4b',
+    eyebrowColor: '#15803d',
     title: 'Learn From Mistakes in Duolingo Chess',
     body: 'Game Review gives you a move-by-move breakdown — and ways to improve.',
     appId: 'duolingo',
@@ -109,7 +109,7 @@ export const TODAY_EVENTS: EventCard[] = [
   {
     id: 'e3',
     eyebrow: 'What We’re Playing',
-    eyebrowColor: '#b26a00',
+    eyebrowColor: '#ab6200',
     title: 'Show School Spirit in College Football',
     body: 'The road to the National Championship starts here.',
     appId: 'ea-sports-fc',

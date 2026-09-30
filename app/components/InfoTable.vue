@@ -12,7 +12,7 @@ defineProps<{ rows: { label: string; value: string; link?: boolean }[] }>()
       <dt class="w-[38%] shrink-0 text-[12.5px] text-muted">{{ r.label }}</dt>
       <dd
         class="min-w-0 flex-1 text-[12.5px] break-words"
-        :class="r.link ? 'font-medium text-blue hover:underline' : 'text-ink'"
+        :class="r.link ? 'font-medium text-link hover:underline' : 'text-ink'"
       >
         {{ r.value }}
       </dd>

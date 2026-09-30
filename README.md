@@ -124,13 +124,14 @@ through the switchable variable and the whole storefront re-themes from one plac
 | `--recess`       | `#f7f7fa`   | `#2c2c2e`   | nested / recessed blocks             |
 | `--hairline`     | `#e5e5ea`   | `#38383a`   | 1px dividers and card borders        |
 | `--ink`          | `#1d1d1f`   | `#f5f5f7`   | primary text                         |
-| `--muted`        | `#86868b`   | `#98989d`   | secondary text, metadata             |
-| `--blue`         | `#0071e3`   | `#0a84ff`   | primary actions                      |
+| `--muted`        | `#636366`   | `#98989d`   | secondary text, metadata             |
+| `--blue`         | `#0071e3`   | `#0a84ff`   | primary actions (filled buttons)     |
+| `--link`         | `#0059b5`   | `#abc7ff`   | blue *text* — links, pills, badges   |
 | `--amber`        | `#ff9500`   | `#ff9f0a`   | star ratings                         |
 | `--fill`         | `black 5%`  | `white 9%`  | chips, buttons, row hovers           |
 
 Semantic utilities keep components theme-agnostic: `bg-canvas`, `bg-card`, `text-ink`, `text-muted`,
-`border-hairline`, `bg-fill`, `bg-fill-strong`, `bg-chrome`, `shadow-apple-card`.
+`text-link`, `border-hairline`, `bg-fill`, `bg-fill-strong`, `bg-chrome`, `shadow-apple-card`.
 
 ### Dark mode
 
@@ -337,6 +338,43 @@ Clicking any Preview tile on `/app/[id]` opens `ScreenshotLightbox.vue`:
 
 ---
 
+## Accessibility
+
+`scripts/shoot.mjs --a11y` audits a rendered page and reports the offending HTML alongside each
+finding, so the rules below are enforced rather than aspirational. It covers text contrast (WCAG AA,
+computed against the nearest opaque ancestor background), accessible names, heading order,
+focusables inside `aria-hidden`, and target sizes. All routes currently report **0 failures**.
+
+### Colour
+
+| Token | Light | Why |
+| --- | --- | --- |
+| `--muted` | `#636366` | Deliberately **not** the design system's `#86868B` (3.6:1 on white). This clears 4.5:1 on every surface, including the pastel category tints. |
+| `--blue` | `#0071e3` | DESIGN.md's `primary-container`. Used for filled buttons and icons. |
+| `--link` | `#0059b5` | DESIGN.md's `primary` — blue **text**. `#0071e3` only reaches 4.31:1 on `--canvas`, so links, tonal pills and badges use this instead. |
+
+The split is the design system's own: Material-style token sets separate `primary` (text/icons) from
+`primary-container` (filled surfaces), and this project now does too. Icons keep `text-blue`, since
+graphical contrast only needs 3:1.
+
+### Structure
+
+- Exactly one `<h1>` per page. `/search` has no visible title by design, so it uses an `sr-only` one.
+- Heading levels never skip. The Today hero cards take a `level` prop (`h2` under the page title,
+  `h3` inside a section on Arcade); `ReviewCard` titles are `h3`; footer link groups are `h2`; the
+  Top Charts insight banner is a `<p>` — it is a promotional callout that precedes the page `<h1>`.
+- A "Skip to content" link is the first focusable element, since the sidebar is a long link list.
+- Both search fields carry an `aria-label`; a placeholder is not a label.
+
+### Known limits of the audit
+
+The target-size check implements the inline and 24px-spacing exceptions of SC 2.5.8, but it is still
+a heuristic — it is reported as a `note`, not a failure. Contrast is skipped wherever a gradient or a
+translucent layer makes the effective background unknowable, so a blue-on-tinted-chip case can slip
+through; the checks are deliberately conservative rather than noisy.
+
+---
+
 ## Visual checks
 
 `scripts/shoot.mjs` drives a headless Chrome over the DevTools Protocol — no dependencies, since
@@ -370,6 +408,15 @@ node scripts/shoot.mjs http://localhost:3000/charts .preview/offline.png \
 # ...and that an uncached route falls back to the static offline document
 node scripts/shoot.mjs http://localhost:3000/charts .preview/fallback.png \
   --setup "..." --reload --offline --goto "http://localhost:3000/arcade"
+
+# accessibility audit — contrast, accessible names, heading order, focus traps
+node scripts/shoot.mjs http://localhost:3000/app/chatgpt --a11y
+
+# sweep every route in one go
+for r in / /charts /apps /games /arcade /categories /app/chatgpt; do
+  printf "%-18s " "$r"
+  node scripts/shoot.mjs "http://localhost:3000$r" --a11y | grep -cE "^  FAIL" || true
+done
 ```
 
 `--reload`, `--goto`, `--offline` and `--online` run **in the order given**, which is what makes a

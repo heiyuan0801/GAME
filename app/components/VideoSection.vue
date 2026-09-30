@@ -182,7 +182,7 @@ function onInlineEnded(id: string) {
             </span>
             <button
               type="button"
-              class="text-[12.5px] font-medium text-blue hover:underline inline-flex items-center gap-1"
+              class="text-[12.5px] font-medium text-link hover:underline inline-flex items-center gap-1"
               @click="openModal(v)"
             >
               Cinema Mode

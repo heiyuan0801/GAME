@@ -23,7 +23,7 @@ const shown = computed(() =>
       <button
         v-if="isLong && !expanded"
         type="button"
-        class="font-medium text-blue hover:underline"
+        class="font-medium text-link hover:underline"
         @click="expanded = true"
       >
         more
@@ -37,7 +37,7 @@ const shown = computed(() =>
         <UiIcon name="check" :size="11" class="text-blue" />
         Helpful?
       </span>
-      <button type="button" class="ml-1 font-medium text-blue hover:underline">Yes</button>
+      <button type="button" class="ml-1 font-medium text-link hover:underline">Yes</button>
       <span class="mx-1">·</span>
       <span class="tabular-nums">{{ review.helpful }}</span>
     </p>

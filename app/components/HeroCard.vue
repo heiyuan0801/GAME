@@ -2,7 +2,7 @@
 import type { HeroCard } from '~/data/editorial'
 import { byId } from '~/data/apps'
 
-const props = defineProps<{ card: HeroCard }>()
+const props = withDefaults(defineProps<{ card: HeroCard; level?: 2 | 3 }>(), { level: 3 })
 const app = computed(() => byId(props.card.appId))
 </script>
 
@@ -63,11 +63,14 @@ const app = computed(() => byId(props.card.appId))
       <p class="text-[12px] font-semibold tracking-[0.08em] text-white/70 uppercase">
         {{ card.eyebrow }}
       </p>
-      <h3
+      <!-- The heading level is contextual: on Today these cards sit directly
+           under the page <h1>, on Arcade they are nested inside a section. -->
+      <component
+        :is="`h${level}`"
         class="mt-2 max-w-[15ch] text-balance text-[27px] leading-[1.08] font-bold tracking-[-0.02em] text-white sm:text-[34px]"
       >
         {{ card.title }}
-      </h3>
+      </component>
 
       <div class="flex-1" />
 

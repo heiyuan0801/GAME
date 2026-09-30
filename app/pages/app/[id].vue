@@ -101,7 +101,7 @@ const related = computed(() => recommend(a, APPS, 6))
         </h1>
         <NuxtLink
           to="/charts"
-          class="mt-0.5 inline-block text-[15px] font-medium text-blue hover:underline"
+          class="mt-0.5 inline-block text-[15px] font-medium text-link hover:underline"
         >
           {{ a.developer }}
         </NuxtLink>
@@ -120,7 +120,7 @@ const related = computed(() => recommend(a, APPS, 6))
           <span
             v-for="badge in a.editors ?? []"
             :key="badge"
-            class="rounded-[5px] bg-blue/10 px-1.5 py-[1px] text-[10.5px] font-semibold text-blue"
+            class="rounded-[5px] bg-blue/10 px-1.5 py-[1px] text-[10.5px] font-semibold text-link"
           >
             {{ badge }}
           </span>
@@ -175,7 +175,7 @@ const related = computed(() => recommend(a, APPS, 6))
         </div>
         <button
           type="button"
-          class="hidden shrink-0 text-[13px] font-medium text-blue hover:underline sm:block"
+          class="hidden shrink-0 text-[13px] font-medium text-link hover:underline sm:block"
         >
           Version History
         </button>
@@ -242,7 +242,7 @@ const related = computed(() => recommend(a, APPS, 6))
           </p>
           <button
             type="button"
-            class="mt-2 text-[13.5px] font-medium text-blue hover:underline"
+            class="mt-2 text-[13.5px] font-medium text-link hover:underline"
             @click="descOpen = !descOpen"
           >
             {{ descOpen ? 'Less' : 'more' }}
@@ -301,7 +301,7 @@ const related = computed(() => recommend(a, APPS, 6))
           <button
             v-if="sortedReviews.length > 2"
             type="button"
-            class="mt-5 text-[13.5px] font-medium text-blue hover:underline"
+            class="mt-5 text-[13.5px] font-medium text-link hover:underline"
             @click="showAllReviews = !showAllReviews"
           >
             {{ showAllReviews ? 'Show fewer reviews' : `See all ${sortedReviews.length} reviews` }}
@@ -332,7 +332,7 @@ const related = computed(() => recommend(a, APPS, 6))
                   <span class="text-[11px] text-muted">{{ r.app.ratingsCount }}</span>
                   <span
                     v-if="r.reasons[0]"
-                    class="rounded-full bg-blue/10 px-2 py-[1px] text-[10.5px] font-medium text-blue"
+                    class="rounded-full bg-blue/10 px-2 py-[1px] text-[10.5px] font-medium text-link"
                   >
                     {{ r.reasons[0] }}
                   </span>
@@ -350,7 +350,7 @@ const related = computed(() => recommend(a, APPS, 6))
         <section class="rounded-[18px] bg-card p-5 shadow-apple-card">
           <div class="mb-3 flex items-center justify-between">
             <h3 class="text-[15.5px] font-semibold tracking-[-0.01em]">App Privacy</h3>
-            <button type="button" class="text-[12.5px] font-medium text-blue hover:underline">
+            <button type="button" class="text-[12.5px] font-medium text-link hover:underline">
               See Details
             </button>
           </div>

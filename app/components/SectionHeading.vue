@@ -29,7 +29,7 @@ defineProps<{
     <NuxtLink
       v-if="more"
       :to="more.to"
-      class="group inline-flex shrink-0 items-center gap-1 pb-1 text-[13.5px] font-medium text-blue transition hover:text-blue-hover"
+      class="group inline-flex shrink-0 items-center gap-1 pb-1 text-[13.5px] font-medium text-link transition hover:text-link-hover"
     >
       {{ more.label }}
       <UiIcon

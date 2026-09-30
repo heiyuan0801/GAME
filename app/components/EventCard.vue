@@ -26,7 +26,7 @@ const app = computed(() => byId(props.card.appId))
       <AppIcon v-if="app" :name="app.icon" :size="34" />
       <span class="min-w-0 flex-1 truncate text-[12.5px] text-muted">{{ card.appNote }}</span>
       <span
-        class="shrink-0 rounded-full bg-fill px-3.5 py-[5px] text-[12px] font-semibold text-blue transition group-hover:bg-fill-strong"
+        class="shrink-0 rounded-full bg-fill px-3.5 py-[5px] text-[12px] font-semibold text-link transition group-hover:bg-fill-strong"
       >
         View
       </span>

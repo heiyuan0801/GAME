@@ -32,7 +32,10 @@ const cols = [
 
       <div class="grid grid-cols-2 gap-6 py-6 sm:grid-cols-3 lg:grid-cols-5">
         <div v-for="c in cols" :key="c.title">
-          <h3 class="mb-2 text-[11.5px] font-semibold text-ink">{{ c.title }}</h3>
+          <!-- h2 rather than h3: on pages whose content has no <h2> these
+               headings follow the page <h1> directly, and a skipped level
+               breaks the document outline. -->
+          <h2 class="mb-2 text-[11.5px] font-semibold text-ink">{{ c.title }}</h2>
           <ul class="space-y-[5px]">
             <li v-for="l in c.links" :key="l">
               <a href="#" class="text-[11.5px] text-muted transition hover:text-ink hover:underline">

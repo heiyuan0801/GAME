@@ -32,7 +32,7 @@ const props = withDefaults(
     </div>
 
     <span
-      class="shrink-0 rounded-full bg-fill px-4 py-[5px] text-[12.5px] font-semibold text-blue transition group-hover:bg-fill-strong"
+      class="shrink-0 rounded-full bg-fill px-4 py-[5px] text-[12.5px] font-semibold text-link transition group-hover:bg-fill-strong"
     >
       {{ app.price === 'Free' ? 'GET' : app.price }}
     </span>

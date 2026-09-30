@@ -36,7 +36,7 @@ const failed = ref(false)
         <span class="text-[11.5px] text-muted tabular-nums">{{ compactCount(result.ratingsCount) }}</span>
       </span>
       <span
-        class="shrink-0 rounded-full bg-fill px-3.5 py-[4px] text-[12px] font-semibold text-blue transition group-hover:bg-fill-strong"
+        class="shrink-0 rounded-full bg-fill px-3.5 py-[4px] text-[12px] font-semibold text-link transition group-hover:bg-fill-strong"
       >
         {{ result.price === 'Free' ? 'GET' : result.price }}
       </span>

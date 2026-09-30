@@ -23,7 +23,7 @@ const panelApps = (ids: string[]) => ids.map(byId).filter((a): a is AppItem => !
 
     <!-- Hero pair -->
     <section class="grid gap-4 lg:grid-cols-2">
-      <HeroCard v-for="h in TODAY_HEROES" :key="h.id" :card="h" />
+      <HeroCard v-for="h in TODAY_HEROES" :key="h.id" :card="h" :level="2" />
     </section>
 
     <!-- Biggest apps and games -->

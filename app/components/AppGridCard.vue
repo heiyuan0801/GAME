@@ -20,7 +20,7 @@ defineProps<{ app: AppItem }>()
         <span class="text-[11.5px] text-muted tabular-nums">{{ app.rating.toFixed(1) }}</span>
       </span>
       <span
-        class="rounded-full bg-fill px-3.5 py-[4px] text-[12px] font-semibold text-blue transition group-hover:bg-fill-strong"
+        class="rounded-full bg-fill px-3.5 py-[4px] text-[12px] font-semibold text-link transition group-hover:bg-fill-strong"
       >
         {{ app.price === 'Free' ? 'GET' : app.price }}
       </span>

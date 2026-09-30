@@ -20,14 +20,19 @@
 
   /* Text */
   --ink: #1d1d1f;
-  /* Apple's own secondary-text grey. #86868b looks right but only reaches
-     3.6:1 on white; this clears WCAG AA (4.5:1) on every surface in the ramp. */
-  --muted: #6e6e73;
+  /* Deliberate deviation from the design system's #86868B, which only reaches
+     3.6:1 on white. This clears WCAG AA (4.5:1) on every surface in the ramp,
+     including the pastel category tints. */
+  --muted: #636366;
 
   /* Accents */
   --blue: #0071e3;
   --blue-hover: #0077ed;
   --amber: #ff9500;
+  /* DESIGN.md separates `primary` (text/icons) from `primary-container`
+     (filled buttons). #0071e3 only reaches 4.31:1 on the canvas, so blue *text*
+     uses the design system's `primary` instead. */
+  --link: #0059b5;
 
   /* Tinted fills (chips, buttons, row hovers) */
   --fill-subtle: rgb(0 0 0 / 0.03);
@@ -58,6 +63,7 @@
   --blue: #0a84ff;
   --blue-hover: #409cff;
   --amber: #ff9f0a;
+  --link: #abc7ff;
 
   --fill-subtle: rgb(255 255 255 / 0.05);
   --fill: rgb(255 255 255 / 0.09);
@@ -88,6 +94,7 @@
   --color-blue: var(--blue);
   --color-blue-hover: var(--blue-hover);
   --color-amber: var(--amber);
+  --color-link: var(--link);
 
   --color-fill-subtle: var(--fill-subtle);
   --color-fill: var(--fill);
