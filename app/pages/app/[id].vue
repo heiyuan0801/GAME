@@ -249,6 +249,9 @@ const related = computed(() => recommend(a, APPS, 6))
           </button>
         </section>
 
+        <!-- Download sources -->
+        <DriveDownloads class="mt-11" />
+
         <!-- Ratings & Reviews -->
         <section class="mt-11">
           <div class="mb-5 flex flex-wrap items-end justify-between gap-3">

@@ -35,7 +35,7 @@ Other scripts:
 | ---------------------- | ----------------------------------------------------------------- |
 | `/`                    | **Today** — hero pair, biggest apps & games, in-app events, editors' favorites |
 | `/charts`              | **Top Charts** — editor's insight banner, platform switcher, category filter, Top Free / Top Paid / Top Grossing, plus a **Live from Apple** mode with real rankings, genre + region pickers |
-| `/app/[id]`            | **Product detail** — header lockup, stats strip, What's New, Preview carousel, Description, Ratings & Reviews with developer responses, App Privacy, Information, Supports |
+| `/app/[id]`            | **Product detail** — header lockup, stats strip, What's New, Preview carousel, Description, Download sources, Ratings & Reviews with developer responses, App Privacy, Information, Supports |
 | `/apps`                | Apps storefront with themed rails                                 |
 | `/games`               | Games storefront with genre tiles                                 |
 | `/arcade`              | Apple Arcade landing page                                         |
@@ -67,6 +67,7 @@ app/
   data/
     apps.ts                   the app dataset (38 titles) + chart helpers
     editorial.ts              Today page, chart insight, categories, arcade, search copy
+    drives.ts                 cloud-drive download sources + brand marks
     nav.ts                    sidebar / platform / mobile-tab navigation
   utils/logos.ts              simplified vector brand marks + icon backgrounds
   utils/format.ts             compactCount / parseCount number formatting
@@ -86,6 +87,8 @@ app/
     RatingSummary.vue  ReviewCard.vue  InfoTable.vue
     OfflineBar.vue            offline pill + "new version available" toast
     AuthModal.vue             sign in / create account / reset password dialog
+    DriveDownloads.vue        cloud-drive download cards
+    DriveIcon.vue             cloud-drive brand tile
   pages/                      file-based routes
 public/
   manifest.webmanifest  sw.js  offline.html  icons/
@@ -262,6 +265,44 @@ one surfaced**, which the UI renders as a small chip:
 
 Every contribution appends a human-readable reason ("Also in Photo & Video", "Similar feature set",
 "Also charting in Top Free"), so the rail can always explain itself.
+
+---
+
+## Download sources (网盘)
+
+Every app detail page carries a **Download sources** block between the Description and the reviews: a
+card per cloud drive, each with its brand tile, the name as the service is actually known, and a
+romanised name for the English UI.
+
+```
+app/
+  data/drives.ts            the six drives, their marks and their link targets
+  components/DriveIcon.vue  brand tile
+  components/DriveDownloads.vue  the section
+```
+
+| Drive | Tile | Mark |
+| --- | --- | --- |
+| 夸克网盘 | violet | orbit ring + planet |
+| 迅雷云盘 | blue | bolt |
+| 阿里云盘 | deep orange | cloud with a download arrow |
+| UC 网盘 | red | `U` + `C` letterforms |
+| 百度网盘 | indigo | paw print |
+| 123 云盘 | green | download into a tray |
+
+The marks are simplified abstractions drawn on a 48×48 grid as white-on-colour, the same convention
+as `utils/logos.ts` — they are not the real logos. Every tile fill was checked against white for the
+3:1 that a graphical mark needs.
+
+**Front-end only.** There is no backend, so each card links to the provider's own site and the
+section says so. `downloadUrl(drive)` in `data/drives.ts` is the single place to swap in real per-app
+share links — the UI needs no other change. Cards open in a new tab with
+`rel="noopener noreferrer"` and carry a visually-hidden "(opens in a new tab)" so the behaviour is
+announced, not just implied by the arrow.
+
+The grid is one column on mobile, two from `sm`, three from `xl`. Between 1024px and 1100px the main
+column is at its narrowest (the app sidebar and the metadata sidebar both take their share), so the
+longest romanised label — "Baidu Netdisk" — ellipsises there; the Chinese name always fits.
 
 ---
 
