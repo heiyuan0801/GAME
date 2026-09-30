@@ -13,6 +13,29 @@ if (!app.value) {
 const a = app.value as AppItem
 const videos = computed(() => getAppVideos(a))
 
+/**
+ * The lockup band is tinted from the app's own accent, so each detail page reads
+ * as belonging to that app. Mixing against `--card` keeps it theme-aware — the
+ * same expression lands on a pastel in light mode and a deep tint in dark — and
+ * `--card` is also the band's base, so it is always a defined surface even for a
+ * white or near-black brand colour.
+ *
+ * The tint is deliberately confined to the top-right: the icon and title sit on
+ * the left, and a tint that reaches them fails AA on `--muted`. An accent is an
+ * arbitrary brand colour, so the ramp has to end before the text starts rather
+ * than hope every accent is dark/light enough.
+ */
+const headerBackground = computed(() => {
+  const accent = a.accent
+  return {
+    background:
+      `radial-gradient(72% 125% at 100% 0%, ` +
+      `color-mix(in srgb, ${accent} 30%, var(--card)) 0%, ` +
+      `color-mix(in srgb, ${accent} 10%, var(--card)) 45%, ` +
+      `var(--card) 72%)`,
+  }
+})
+
 useHead({
   title: `${a.name} on the App Store`,
   meta: [{ name: 'description', content: a.tagline }],
@@ -87,57 +110,67 @@ const related = computed(() => recommend(a, APPS, 6))
 <template>
   <div class="mx-auto max-w-[1180px] px-4 pt-6 sm:px-6 sm:pt-8">
     <!-- ---------------------------- Lockup ---------------------------- -->
-    <header class="flex flex-col gap-5 sm:flex-row sm:items-start">
-      <AppIcon
-        :name="a.icon"
-        :size="112"
-        class="mx-auto shrink-0 sm:mx-0 sm:!h-[128px] sm:!w-[128px]"
-        radius="22.37%"
+    <header
+      class="relative overflow-hidden rounded-[24px] p-5 shadow-apple-card sm:p-7"
+      :style="headerBackground"
+    >
+      <!-- soft accent glow, deliberately pushed away from the text -->
+      <span
+        class="pointer-events-none absolute -top-20 -right-14 h-56 w-56 rounded-full opacity-30 blur-3xl"
+        :style="{ background: a.accent }"
+        aria-hidden="true"
       />
 
-      <div class="min-w-0 flex-1 text-center sm:text-left">
-        <h1 class="text-[26px] leading-tight font-bold tracking-[-0.022em] sm:text-[32px]">
-          {{ a.name }}
-        </h1>
-        <NuxtLink
-          to="/charts"
-          class="mt-0.5 inline-block text-[15px] font-medium text-link hover:underline"
-        >
-          {{ a.developer }}
-        </NuxtLink>
+      <div class="relative flex flex-col gap-5 sm:flex-row sm:items-start">
+        <AppIcon
+          :name="a.icon"
+          :size="112"
+          class="mx-auto shrink-0 sm:mx-0 sm:!h-[128px] sm:!w-[128px]"
+          radius="22.37%"
+        />
 
-        <p
-          class="mt-2 text-[11px] font-semibold tracking-[0.06em] text-muted uppercase"
-        >
-          {{ a.category }}
-        </p>
-        <div class="mt-1.5 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-          <span
-            class="rounded-[5px] border border-hairline px-1.5 py-[1px] text-[10.5px] font-semibold text-muted"
+        <div class="min-w-0 flex-1 text-center sm:text-left">
+          <h1 class="text-[26px] leading-tight font-bold tracking-[-0.022em] sm:text-[32px]">
+            {{ a.name }}
+          </h1>
+          <NuxtLink
+            to="/charts"
+            class="mt-0.5 inline-block text-[15px] font-medium text-link hover:underline"
           >
-            {{ a.age }}
-          </span>
-          <span
-            v-for="badge in a.editors ?? []"
-            :key="badge"
-            class="rounded-[5px] bg-blue/10 px-1.5 py-[1px] text-[10.5px] font-semibold text-link"
-          >
-            {{ badge }}
-          </span>
-        </div>
+            {{ a.developer }}
+          </NuxtLink>
 
-        <!-- CTA -->
-        <div class="mt-5 flex items-center justify-center gap-3 sm:justify-start">
-          <GetButton :app="a" size="lg" />
-          <button
-            type="button"
-            class="grid h-9 w-9 place-items-center rounded-full text-blue transition hover:bg-blue/8"
-            :aria-label="copied ? 'Link copied' : 'Share app'"
-            @click="share"
-          >
-            <UiIcon :name="copied ? 'check' : 'share'" :size="18" />
-          </button>
-          <span class="text-[12px] text-muted">{{ a.priceNote }}</span>
+          <p class="mt-2 text-[11px] font-semibold tracking-[0.06em] text-muted uppercase">
+            {{ a.category }}
+          </p>
+          <div class="mt-1.5 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+            <span
+              class="rounded-[5px] border border-hairline px-1.5 py-[1px] text-[10.5px] font-semibold text-muted"
+            >
+              {{ a.age }}
+            </span>
+            <span
+              v-for="badge in a.editors ?? []"
+              :key="badge"
+              class="rounded-[5px] bg-blue/10 px-1.5 py-[1px] text-[10.5px] font-semibold text-link"
+            >
+              {{ badge }}
+            </span>
+          </div>
+
+          <!-- CTA -->
+          <div class="mt-5 flex items-center justify-center gap-3 sm:justify-start">
+            <GetButton :app="a" size="lg" />
+            <button
+              type="button"
+              class="grid h-9 w-9 place-items-center rounded-full text-blue transition hover:bg-blue/8"
+              :aria-label="copied ? 'Link copied' : 'Share app'"
+              @click="share"
+            >
+              <UiIcon :name="copied ? 'check' : 'share'" :size="18" />
+            </button>
+            <span class="text-[12px] text-muted">{{ a.priceNote }}</span>
+          </div>
         </div>
       </div>
     </header>
